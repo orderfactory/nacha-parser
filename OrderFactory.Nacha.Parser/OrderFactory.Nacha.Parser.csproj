@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Company>www.orderfactory.com</Company>
+    <Authors>Sergey Nosov</Authors>
+    <Copyright>Copyright © 2021 www.orderfactory.com</Copyright>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/orderfactory/nacha-parser</RepositoryUrl>
+    <PackageTags>nacha;ach;nacha parser;nacha file reader</PackageTags>
+    <PackageLicenseFile></PackageLicenseFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31321.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderFactory.Nacha.Parser", "OrderFactory.Nacha.Parser\OrderFactory.Nacha.Parser.csproj", "{BD04BF27-CB83-4081-8CAD-693C7ABC2183}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderFactory.Nacha.Parser.Tests", "OrderFactory.Nacha.Parser.Tests\OrderFactory.Nacha.Parser.Tests.csproj", "{55A0B98E-9EBD-46A1-BB26-285B59161545}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD04BF27-CB83-4081-8CAD-693C7ABC2183}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD04BF27-CB83-4081-8CAD-693C7ABC2183}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD04BF27-CB83-4081-8CAD-693C7ABC2183}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD04BF27-CB83-4081-8CAD-693C7ABC2183}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55A0B98E-9EBD-46A1-BB26-285B59161545}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55A0B98E-9EBD-46A1-BB26-285B59161545}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55A0B98E-9EBD-46A1-BB26-285B59161545}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55A0B98E-9EBD-46A1-BB26-285B59161545}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7A547FA5-B80B-4D03-9D30-3E036FD5E4DA}
+	EndGlobalSection
+EndGlobal

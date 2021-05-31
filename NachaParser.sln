@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderFactory.Nacha.Parser", "OrderFactory.Nacha.Parser\OrderFactory.Nacha.Parser.csproj", "{BD04BF27-CB83-4081-8CAD-693C7ABC2183}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderFactory.Nacha.Parser", "OrderFactory.Nacha.Parser\OrderFactory.Nacha.Parser.csproj", "{BD04BF27-CB83-4081-8CAD-693C7ABC2183}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderFactory.Nacha.Parser.Tests", "OrderFactory.Nacha.Parser.Tests\OrderFactory.Nacha.Parser.Tests.csproj", "{55A0B98E-9EBD-46A1-BB26-285B59161545}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderFactory.Nacha.Parser.Tests", "OrderFactory.Nacha.Parser.Tests\OrderFactory.Nacha.Parser.Tests.csproj", "{55A0B98E-9EBD-46A1-BB26-285B59161545}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "OrderFactory.Nacha.Database", "OrderFactory.Nacha.Database\OrderFactory.Nacha.Database.sqlproj", "{6F691277-FA74-4703-89C1-D0F81D74F250}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,12 @@ Global
 		{55A0B98E-9EBD-46A1-BB26-285B59161545}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55A0B98E-9EBD-46A1-BB26-285B59161545}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55A0B98E-9EBD-46A1-BB26-285B59161545}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F691277-FA74-4703-89C1-D0F81D74F250}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F691277-FA74-4703-89C1-D0F81D74F250}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F691277-FA74-4703-89C1-D0F81D74F250}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{6F691277-FA74-4703-89C1-D0F81D74F250}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F691277-FA74-4703-89C1-D0F81D74F250}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F691277-FA74-4703-89C1-D0F81D74F250}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

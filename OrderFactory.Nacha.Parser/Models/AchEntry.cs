@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace OrderFactory.Nacha.Parser.Models
 {
@@ -25,6 +26,30 @@ namespace OrderFactory.Nacha.Parser.Models
             OperatorRoutingNumber = operatorRoutingNumber;
             DateJulian = dateJulian;
             SequenceNumber = sequenceNumber;
+            AchBatchId = achBatchId;
+        }
+
+        public AchEntry(Guid id, string nachaString, Guid achBatchId)
+        {
+            if (string.IsNullOrEmpty(nachaString) || nachaString.Length != 94)
+                throw new ArgumentException("ACH entry string must be 94 characters long", nameof(nachaString));
+
+            Id = id;
+            RecordType = Convert.ToByte(nachaString[..1]);
+            TransactionCode = Convert.ToByte(nachaString[1..3]);
+            ReceivingDfiId = nachaString[3..11].TrimEnd();
+            CheckDigit = Convert.ToByte(nachaString[11..12]);
+            DfiAccountNumber = nachaString[12..29].TrimEnd();
+            Amount = decimal.Parse($"{nachaString[29..37]}.{nachaString[37..39]}", CultureInfo.InvariantCulture);
+            Identification = nachaString[39..54].TrimEnd();
+            AchOperator = null;
+            Name = nachaString[54..76].TrimEnd();
+            DiscretionaryData = nachaString[76..78].TrimEnd();
+            AddendaRecordIndicator = Convert.ToByte(nachaString[78..79]);
+            TraceNumber = nachaString[79..94].TrimEnd();
+            OperatorRoutingNumber = null;
+            DateJulian = null;
+            SequenceNumber = null;
             AchBatchId = achBatchId;
         }
 

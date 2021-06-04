@@ -5,20 +5,34 @@ namespace OrderFactory.Nacha.Parser.Models
     public class AchReturnAddenda
     {
         public AchReturnAddenda(Guid id, byte recordType, byte addendaTypeCode, string returnReasonCode,
-            string originalEntryTraceNumber, DateTime dateOfDeath, string originalReceivingDfiId,
-            string? addendaInformation, string? correctedData, string? reserved, string traceNumber, Guid achEntryId)
+            string originalEntryTraceNumber, string originalReceivingDfiId, string? correctedData, string traceNumber,
+            Guid achEntryId)
         {
             Id = id;
             RecordType = recordType;
             AddendaTypeCode = addendaTypeCode;
             ReturnReasonCode = returnReasonCode;
             OriginalEntryTraceNumber = originalEntryTraceNumber;
-            DateOfDeath = dateOfDeath;
             OriginalReceivingDfiId = originalReceivingDfiId;
-            AddendaInformation = addendaInformation;
             CorrectedData = correctedData;
-            Reserved = reserved;
             TraceNumber = traceNumber;
+            AchEntryId = achEntryId;
+        }
+
+        public AchReturnAddenda(Guid id, string nachaString, Guid achEntryId)
+        {
+            if (string.IsNullOrEmpty(nachaString) || nachaString.Length != 94)
+                throw new ArgumentException("ACH return addenda string must be 94 characters long",
+                    nameof(nachaString));
+
+            Id = id;
+            RecordType = Convert.ToByte(nachaString[..1]);
+            AddendaTypeCode = Convert.ToByte(nachaString[1..3]);
+            ReturnReasonCode = nachaString[3..6].TrimEnd();
+            OriginalEntryTraceNumber = nachaString[6..21].TrimEnd();
+            OriginalReceivingDfiId = nachaString[27..35].TrimEnd();
+            CorrectedData = nachaString[35..64].TrimEnd();
+            TraceNumber = nachaString[79..94].TrimEnd();
             AchEntryId = achEntryId;
         }
 
@@ -27,11 +41,8 @@ namespace OrderFactory.Nacha.Parser.Models
         public byte AddendaTypeCode { get; }
         public string ReturnReasonCode { get; }
         public string OriginalEntryTraceNumber { get; }
-        public DateTime DateOfDeath { get; }
         public string OriginalReceivingDfiId { get; }
-        public string? AddendaInformation { get; }
         public string? CorrectedData { get; }
-        public string? Reserved { get; }
         public string TraceNumber { get; }
         public Guid AchEntryId { get; }
     }

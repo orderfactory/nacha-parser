@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace OrderFactory.Nacha.Parser.Models
 {
-    public class AchEntry
+    public class AchEntry : AchBase
     {
         public AchEntry(Guid id, byte recordType, byte transactionCode, string receivingDfiId, byte checkDigit,
             string dfiAccountNumber, decimal amount, string identification, string? achOperator, string name,
@@ -31,8 +31,7 @@ namespace OrderFactory.Nacha.Parser.Models
 
         public AchEntry(Guid id, string nachaString, Guid achBatchId)
         {
-            if (string.IsNullOrEmpty(nachaString) || nachaString.Length != 94)
-                throw new ArgumentException("ACH entry string must be 94 characters long", nameof(nachaString));
+            CheckNachaString(nachaString, "ACH entry string must be 94 characters long");
 
             Id = id;
             RecordType = Convert.ToByte(nachaString[..1]);

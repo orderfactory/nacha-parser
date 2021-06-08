@@ -2,7 +2,7 @@
 
 namespace OrderFactory.Nacha.Parser.Models
 {
-    public class AchReturnAddenda
+    public class AchReturnAddenda : AchBase
     {
         public AchReturnAddenda(Guid id, byte recordType, byte addendaTypeCode, string returnReasonCode,
             string originalEntryTraceNumber, string originalReceivingDfiId, string? correctedData, string traceNumber,
@@ -21,9 +21,7 @@ namespace OrderFactory.Nacha.Parser.Models
 
         public AchReturnAddenda(Guid id, string nachaString, Guid achEntryId)
         {
-            if (string.IsNullOrEmpty(nachaString) || nachaString.Length != 94)
-                throw new ArgumentException("ACH return addenda string must be 94 characters long",
-                    nameof(nachaString));
+            CheckNachaString(nachaString, "ACH return addenda string must be 94 characters long");
 
             Id = id;
             RecordType = Convert.ToByte(nachaString[..1]);

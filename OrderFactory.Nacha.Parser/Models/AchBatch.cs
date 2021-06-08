@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Globalization;
 
 namespace OrderFactory.Nacha.Parser.Models
 {
-    public class AchBatch
+    public class AchBatch : AchBase
     {
         public AchBatch(Guid id, byte recordType, short serviceClassCode, string name, string discretionaryData,
             string identification, string entryClassCode, string entryDescription, string descriptiveDate,
@@ -37,6 +38,41 @@ namespace OrderFactory.Nacha.Parser.Models
             Reserved = reserved;
             ControlOriginatingDfiId = controlOriginatingDfiId;
             ControlBatchNumber = controlBatchNumber;
+            AchFileId = achFileId;
+        }
+
+        public AchBatch(Guid id, string nachaStartString, string nachaEndString, Guid achFileId)
+        {
+            CheckNachaString(nachaStartString, "ACH batch start string must be 94 characters long");
+            CheckNachaString(nachaEndString, "ACH batch end string must be 94 characters long");
+
+            Id = id;
+            RecordType = Convert.ToByte(nachaStartString[..1]);
+            ServiceClassCode = Convert.ToInt16(nachaStartString[1..4]);
+            Name = nachaStartString[4..20].TrimEnd();
+            DiscretionaryData = nachaStartString[20..40].TrimEnd();
+            Identification = nachaStartString[40..50].TrimEnd();
+            EntryClassCode = nachaStartString[50..53].TrimEnd();
+            EntryDescription = nachaStartString[53..63].TrimEnd();
+            DescriptiveDate = nachaStartString[63..69].TrimEnd();
+            EffectiveEntryDate = DateTime.ParseExact(nachaStartString[69..75], "yyMMdd", CultureInfo.InvariantCulture);
+            SettlementDateJulian = Convert.ToInt16(nachaStartString[75..78]);
+            OriginatorStatusCode = nachaStartString[78..79].TrimEnd();
+            OriginatingDfiId = nachaStartString[79..87];
+            BatchNumber = Convert.ToInt32(nachaStartString[87..94]);
+            ControlRecordType = Convert.ToByte(nachaEndString[..1]);
+            ControlServiceClassCode = Convert.ToInt16(nachaEndString[1..4]);
+            EntryAndAddendaCount = Convert.ToInt32(nachaEndString[4..10]);
+            EntryHash = Convert.ToInt32(nachaEndString[10..20]);
+            TotalDebitAmount = decimal.Parse($"{nachaEndString[20..30]}.{nachaEndString[30..32]}",
+                CultureInfo.InvariantCulture);
+            TotalCreditAmount = decimal.Parse($"{nachaEndString[32..42]}.{nachaEndString[42..44]}",
+                CultureInfo.InvariantCulture);
+            ControlIdentification = nachaEndString[44..54].TrimEnd();
+            MessageAuthenticationCode = nachaEndString[54..73].TrimEnd();
+            Reserved = nachaEndString[73..79].TrimEnd();
+            ControlOriginatingDfiId = nachaEndString[79..87];
+            ControlBatchNumber = Convert.ToInt32(nachaEndString[87..94]);
             AchFileId = achFileId;
         }
 

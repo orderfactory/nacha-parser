@@ -2,7 +2,7 @@
 
 namespace OrderFactory.Nacha.Parser.Models
 {
-    public class AchFile
+    public class AchFile : AchBase
     {
         public AchFile(Guid id, byte recordType, byte priorityCode, string immediateDestination, string immediateOrigin,
             DateTime creationDateTime, string fileIdModifier, short recordSize, byte blockingFactor, byte formatCode,

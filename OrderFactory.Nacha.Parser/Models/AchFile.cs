@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace OrderFactory.Nacha.Parser.Models
 {
@@ -7,7 +8,7 @@ namespace OrderFactory.Nacha.Parser.Models
         public AchFile(Guid id, byte recordType, byte priorityCode, string immediateDestination, string immediateOrigin,
             DateTime creationDateTime, string fileIdModifier, short recordSize, byte blockingFactor, byte formatCode,
             string immediateDestinationName, string immediateOriginName, string referenceCode, byte controlRecordType,
-            int batchCount, int blockCount, int entryAndAddendaCount, decimal entryHash, decimal totalDebitAmount,
+            int batchCount, int blockCount, int entryAndAddendaCount, long entryHash, decimal totalDebitAmount,
             decimal totalCreditAmount, string reserved)
         {
             Id = id;
@@ -33,6 +34,37 @@ namespace OrderFactory.Nacha.Parser.Models
             Reserved = reserved;
         }
 
+        public AchFile(Guid id, string nachaStartString, string nachaEndString)
+        {
+            CheckNachaString(nachaStartString, "ACH file start string must be 94 characters long");
+            CheckNachaString(nachaEndString, "ACH file end string must be 94 characters long");
+
+            Id = id;
+            RecordType = Convert.ToByte(nachaStartString[..1]);
+            PriorityCode = Convert.ToByte(nachaStartString[1..3]);
+            ImmediateDestination = nachaStartString[4..13];
+            ImmediateOrigin = nachaStartString[14..23];
+            CreationDateTime =
+                DateTime.ParseExact(nachaStartString[23..33], "yyMMddHHmm", CultureInfo.InvariantCulture);
+            FileIdModifier = nachaStartString[33..34].TrimEnd();
+            RecordSize = Convert.ToInt16(nachaStartString[34..37]);
+            BlockingFactor = Convert.ToByte(nachaStartString[37..39]);
+            FormatCode = Convert.ToByte(nachaStartString[39..40]);
+            ImmediateDestinationName = nachaStartString[40..63].TrimEnd();
+            ImmediateOriginName = nachaStartString[63..86].TrimEnd();
+            ReferenceCode = nachaStartString[86..94].TrimEnd();
+            ControlRecordType = Convert.ToByte(nachaEndString[..1]);
+            BatchCount = Convert.ToInt32(nachaEndString[1..7]);
+            BlockCount = Convert.ToInt32(nachaEndString[7..13]);
+            EntryAndAddendaCount = Convert.ToInt32(nachaEndString[13..21]);
+            EntryHash = Convert.ToInt64(nachaEndString[21..31]);
+            TotalDebitAmount = decimal.Parse($"{nachaEndString[31..41]}.{nachaEndString[41..43]}",
+                CultureInfo.InvariantCulture);
+            TotalCreditAmount = decimal.Parse($"{nachaEndString[43..53]}.{nachaEndString[53..55]}",
+                CultureInfo.InvariantCulture);
+            Reserved = nachaEndString[55..94].TrimEnd();
+        }
+
         public Guid Id { get; }
         public byte RecordType { get; }
         public byte PriorityCode { get; }
@@ -50,7 +82,7 @@ namespace OrderFactory.Nacha.Parser.Models
         public int BatchCount { get; }
         public int BlockCount { get; }
         public int EntryAndAddendaCount { get; }
-        public decimal EntryHash { get; }
+        public long EntryHash { get; }
         public decimal TotalDebitAmount { get; }
         public decimal TotalCreditAmount { get; }
         public string Reserved { get; }

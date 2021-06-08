@@ -17,7 +17,7 @@
     [BatchCount]               INT              NOT NULL,
     [BlockCount]               INT              NOT NULL,
     [EntryAndAddendaCount]     INT              NOT NULL,
-    [EntryHash]                NUMERIC(10, 0)   NOT NULL,
+    [EntryHash]                BIGINT           NOT NULL,
     [TotalDebitAmount]         DECIMAL(20, 2)   NOT NULL,
     [TotalCreditAmount]        DECIMAL(20, 2)   NOT NULL,
     [Reserved]                 NVARCHAR(39)     NOT NULL

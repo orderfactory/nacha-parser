@@ -17,7 +17,7 @@
     [ControlRecordType]         TINYINT          NOT NULL DEFAULT 8,
     [ControlServiceClassCode]   SMALLINT         NOT NULL,
     [EntryAndAddendaCount]      INT              NOT NULL,
-    [EntryHash]                 NUMERIC(10, 0)   NOT NULL,
+    [EntryHash]                 BIGINT           NOT NULL,
     [TotalDebitAmount]          DECIMAL(20, 2)   NOT NULL,
     [TotalCreditAmount]         DECIMAL(20, 2)   NOT NULL,
     [ControlIdentification]     NVARCHAR(10)     NOT NULL,

@@ -9,7 +9,7 @@ namespace OrderFactory.Nacha.Parser.Models
             string identification, string entryClassCode, string entryDescription, string descriptiveDate,
             DateTime effectiveEntryDate, short settlementDateJulian, string originatorStatusCode,
             string originatingDfiId, int batchNumber, byte controlRecordType, short controlServiceClassCode,
-            int entryAndAddendaCount, decimal entryHash, decimal totalDebitAmount, decimal totalCreditAmount,
+            int entryAndAddendaCount, long entryHash, decimal totalDebitAmount, decimal totalCreditAmount,
             string controlIdentification, string messageAuthenticationCode, string reserved,
             string controlOriginatingDfiId, int controlBatchNumber, Guid achFileId)
         {
@@ -63,7 +63,7 @@ namespace OrderFactory.Nacha.Parser.Models
             ControlRecordType = Convert.ToByte(nachaEndString[..1]);
             ControlServiceClassCode = Convert.ToInt16(nachaEndString[1..4]);
             EntryAndAddendaCount = Convert.ToInt32(nachaEndString[4..10]);
-            EntryHash = Convert.ToInt32(nachaEndString[10..20]);
+            EntryHash = Convert.ToInt64(nachaEndString[10..20]);
             TotalDebitAmount = decimal.Parse($"{nachaEndString[20..30]}.{nachaEndString[30..32]}",
                 CultureInfo.InvariantCulture);
             TotalCreditAmount = decimal.Parse($"{nachaEndString[32..42]}.{nachaEndString[42..44]}",
@@ -93,7 +93,7 @@ namespace OrderFactory.Nacha.Parser.Models
         public byte ControlRecordType { get; }
         public short ControlServiceClassCode { get; }
         public int EntryAndAddendaCount { get; }
-        public decimal EntryHash { get; }
+        public long EntryHash { get; }
         public decimal TotalDebitAmount { get; }
         public decimal TotalCreditAmount { get; }
         public string ControlIdentification { get; }

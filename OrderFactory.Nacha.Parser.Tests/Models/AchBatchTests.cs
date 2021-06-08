@@ -13,7 +13,6 @@ namespace OrderFactory.Nacha.Parser.Tests.Models
             Action creteEntry = () =>
             {
                 var _ = new AchBatch(default, "foo",
-                    "820000000400506543880000001271160000000000001591585639                         053100300000001",
                     default);
             };
 
@@ -25,9 +24,10 @@ namespace OrderFactory.Nacha.Parser.Tests.Models
         {
             Action creteEntry = () =>
             {
-                var _ = new AchBatch(default,
+                var achBatch = new AchBatch(default,
                     "5200ABCCOMP         000000000000000000  1123456789WEBLOAN PYMT 0829141408290001053100300000001",
-                    "bar", default);
+                    default);
+                achBatch.CompleteParsing("bar");
             };
 
             creteEntry.Should().Throw<ArgumentException>();
@@ -73,7 +73,8 @@ namespace OrderFactory.Nacha.Parser.Tests.Models
             const string nachaEndString =
                 "820000000400506543880000001271160000000000001591585639                         053100300000001";
 
-            var batch = new AchBatch(batchId, nachaStartString, nachaEndString, fileId);
+            var batch = new AchBatch(batchId, nachaStartString, fileId);
+            batch.CompleteParsing(nachaEndString);
 
             batch.Should().BeEquivalentTo(expected);
         }

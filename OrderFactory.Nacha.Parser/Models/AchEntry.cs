@@ -27,6 +27,7 @@ namespace OrderFactory.Nacha.Parser.Models
             DateJulian = dateJulian;
             SequenceNumber = sequenceNumber;
             AchBatchId = achBatchId;
+            ParsingComplete = true;
         }
 
         public AchEntry(Guid id, string nachaString, Guid achBatchId)
@@ -50,6 +51,7 @@ namespace OrderFactory.Nacha.Parser.Models
             DateJulian = null;
             SequenceNumber = null;
             AchBatchId = achBatchId;
+            ParsingComplete = true;
         }
 
         public Guid Id { get; }
@@ -69,5 +71,12 @@ namespace OrderFactory.Nacha.Parser.Models
         public short? DateJulian { get; }
         public short? SequenceNumber { get; }
         public Guid AchBatchId { get; }
+
+        public AchReturnAddenda? AchReturnAddenda { get; private set; }
+
+        public void SetReturnAddenda(AchReturnAddenda achReturnAddenda)
+        {
+            AchReturnAddenda = achReturnAddenda;
+        }
     }
 }

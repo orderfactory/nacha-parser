@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace OrderFactory.Nacha.Parser.Models
 {
     public class AchBatch : AchBase
     {
+        private readonly ICollection<AchEntry> _achEntries = new List<AchEntry>();
+
         public AchBatch(Guid id, byte recordType, short serviceClassCode, string name, string discretionaryData,
             string identification, string entryClassCode, string entryDescription, string descriptiveDate,
             DateTime effectiveEntryDate, short settlementDateJulian, string originatorStatusCode,
@@ -39,12 +42,12 @@ namespace OrderFactory.Nacha.Parser.Models
             ControlOriginatingDfiId = controlOriginatingDfiId;
             ControlBatchNumber = controlBatchNumber;
             AchFileId = achFileId;
+            ParsingComplete = true;
         }
 
-        public AchBatch(Guid id, string nachaStartString, string nachaEndString, Guid achFileId)
+        public AchBatch(Guid id, string nachaStartString, Guid achFileId)
         {
             CheckNachaString(nachaStartString, "ACH batch start string must be 94 characters long");
-            CheckNachaString(nachaEndString, "ACH batch end string must be 94 characters long");
 
             Id = id;
             RecordType = Convert.ToByte(nachaStartString[..1]);
@@ -60,6 +63,13 @@ namespace OrderFactory.Nacha.Parser.Models
             OriginatorStatusCode = nachaStartString[78..79].TrimEnd();
             OriginatingDfiId = nachaStartString[79..87];
             BatchNumber = Convert.ToInt32(nachaStartString[87..94]);
+            AchFileId = achFileId;
+        }
+
+        public void CompleteParsing(string nachaEndString)
+        {
+            CheckNachaString(nachaEndString, "ACH batch end string must be 94 characters long");
+
             ControlRecordType = Convert.ToByte(nachaEndString[..1]);
             ControlServiceClassCode = Convert.ToInt16(nachaEndString[1..4]);
             EntryAndAddendaCount = Convert.ToInt32(nachaEndString[4..10]);
@@ -73,9 +83,8 @@ namespace OrderFactory.Nacha.Parser.Models
             Reserved = nachaEndString[73..79].TrimEnd();
             ControlOriginatingDfiId = nachaEndString[79..87];
             ControlBatchNumber = Convert.ToInt32(nachaEndString[87..94]);
-            AchFileId = achFileId;
+            ParsingComplete = true;
         }
-
         public Guid Id { get; }
         public byte RecordType { get; }
         public short ServiceClassCode { get; }
@@ -90,17 +99,23 @@ namespace OrderFactory.Nacha.Parser.Models
         public string OriginatorStatusCode { get; }
         public string OriginatingDfiId { get; }
         public int BatchNumber { get; }
-        public byte ControlRecordType { get; }
-        public short ControlServiceClassCode { get; }
-        public int EntryAndAddendaCount { get; }
-        public long EntryHash { get; }
-        public decimal TotalDebitAmount { get; }
-        public decimal TotalCreditAmount { get; }
-        public string ControlIdentification { get; }
-        public string MessageAuthenticationCode { get; }
-        public string Reserved { get; }
-        public string ControlOriginatingDfiId { get; }
-        public int ControlBatchNumber { get; }
-        public Guid AchFileId { get; }
+        public byte? ControlRecordType { get; private set; }
+        public short? ControlServiceClassCode { get; private set; }
+        public int? EntryAndAddendaCount { get; private set; }
+        public long? EntryHash { get; private set; }
+        public decimal? TotalDebitAmount { get; private set; }
+        public decimal? TotalCreditAmount { get; private set; }
+        public string? ControlIdentification { get; private set; }
+        public string? MessageAuthenticationCode { get; private set; }
+        public string? Reserved { get; private set; }
+        public string? ControlOriginatingDfiId { get; private set; }
+        public int? ControlBatchNumber { get; private set; }
+        public Guid AchFileId { get; private set; }
+        public IEnumerable<AchEntry> AchEntries => _achEntries;
+
+        public void AddEntry(AchEntry achEntry)
+        {
+            _achEntries.Add(achEntry);
+        }
     }
 }

@@ -17,6 +17,7 @@ namespace OrderFactory.Nacha.Parser.Models
             CorrectedData = correctedData;
             TraceNumber = traceNumber;
             AchEntryId = achEntryId;
+            ParsingComplete = true;
         }
 
         public AchReturnAddenda(Guid id, string nachaString, Guid achEntryId)
@@ -32,6 +33,7 @@ namespace OrderFactory.Nacha.Parser.Models
             CorrectedData = nachaString[35..64].TrimEnd();
             TraceNumber = nachaString[79..94].TrimEnd();
             AchEntryId = achEntryId;
+            ParsingComplete = true;
         }
 
         public Guid Id { get; }

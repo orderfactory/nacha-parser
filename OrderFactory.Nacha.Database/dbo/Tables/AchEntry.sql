@@ -17,5 +17,13 @@
     [DateJulian]             SMALLINT         NULL,
     [SequenceNumber]         SMALLINT         NULL,
     [AchBatchId]             UNIQUEIDENTIFIER NOT NULL,
+	[DateCreated] DATETIME2 NOT NULL DEFAULT GETDATE(),
+	[DateUpdated] DATETIME2 NOT NULL DEFAULT GETDATE(),
+	[CreatedBy] SYSNAME NOT NULL DEFAULT SUSER_NAME(),
+	[UpdatedBy] SYSNAME NOT NULL DEFAULT SUSER_NAME()
     CONSTRAINT [FK_AchEntry_ToAchBatch] FOREIGN KEY ([AchBatchId]) REFERENCES [dbo].[AchBatch]([Id]) ON DELETE CASCADE
 )
+
+GO
+
+CREATE INDEX [IX_AchEntry_ReceivingDfiId] ON [dbo].[AchEntry] ([ReceivingDfiId])

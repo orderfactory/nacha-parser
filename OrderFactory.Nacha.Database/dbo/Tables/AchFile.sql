@@ -20,5 +20,9 @@
     [EntryHash]                BIGINT           NOT NULL,
     [TotalDebitAmount]         DECIMAL(20, 2)   NOT NULL,
     [TotalCreditAmount]        DECIMAL(20, 2)   NOT NULL,
-    [Reserved]                 NVARCHAR(39)     NOT NULL
+    [Reserved]                 NVARCHAR(39)     NOT NULL,
+	[DateCreated] DATETIME2 NOT NULL DEFAULT GETDATE(),
+	[DateUpdated] DATETIME2 NOT NULL DEFAULT GETDATE(),
+	[CreatedBy] SYSNAME NOT NULL DEFAULT SUSER_NAME(),
+	[UpdatedBy] SYSNAME NOT NULL DEFAULT SUSER_NAME()
 )

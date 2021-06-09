@@ -26,5 +26,9 @@
     [ControlOriginatingDfiId]   NCHAR(8)         NOT NULL,
     [ControlBatchNumber]        INT              NOT NULL, 
     [AchFileId]                 UNIQUEIDENTIFIER NOT NULL,
+	[DateCreated] DATETIME2 NOT NULL DEFAULT GETDATE(),
+	[DateUpdated] DATETIME2 NOT NULL DEFAULT GETDATE(),
+	[CreatedBy] SYSNAME NOT NULL DEFAULT SUSER_NAME(),
+	[UpdatedBy] SYSNAME NOT NULL DEFAULT SUSER_NAME()
     CONSTRAINT [FK_AchBatch_ToAchFile] FOREIGN KEY ([AchFileId]) REFERENCES [dbo].[AchFile]([Id]) ON DELETE CASCADE
 )

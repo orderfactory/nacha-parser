@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Dapper.Contrib.Extensions;
 
 namespace OrderFactory.Nacha.Parser.Models
 {
+    [Table("AchFile")]
     public class AchFile : AchBase
     {
         private readonly ICollection<AchBatch> _achBatches = new List<AchBatch>();
@@ -58,25 +60,7 @@ namespace OrderFactory.Nacha.Parser.Models
             ReferenceCode = nachaStartString[86..94].TrimEnd();
         }
 
-        public void CompleteParsing(string nachaEndString)
-        {
-            CheckNachaString(nachaEndString, "ACH file end string must be 94 characters long");
-
-            ControlRecordType = Convert.ToByte(nachaEndString[..1]);
-            BatchCount = Convert.ToInt32(nachaEndString[1..7]);
-            BlockCount = Convert.ToInt32(nachaEndString[7..13]);
-            EntryAndAddendaCount = Convert.ToInt32(nachaEndString[13..21]);
-            EntryHash = Convert.ToInt64(nachaEndString[21..31]);
-            TotalDebitAmount = decimal.Parse($"{nachaEndString[31..41]}.{nachaEndString[41..43]}",
-                CultureInfo.InvariantCulture);
-            TotalCreditAmount = decimal.Parse($"{nachaEndString[43..53]}.{nachaEndString[53..55]}",
-                CultureInfo.InvariantCulture);
-            Reserved = nachaEndString[55..94].TrimEnd();
-
-            ParsingComplete = true;
-        }
-
-        public Guid Id { get; }
+        [ExplicitKey] public Guid Id { get; }
         public byte RecordType { get; }
         public byte PriorityCode { get; }
         public string ImmediateDestination { get; }
@@ -97,7 +81,25 @@ namespace OrderFactory.Nacha.Parser.Models
         public decimal? TotalDebitAmount { get; private set; }
         public decimal? TotalCreditAmount { get; private set; }
         public string? Reserved { get; private set; }
-        public IEnumerable<AchBatch> AchBatches => _achBatches;
+        [Write(false)] public IEnumerable<AchBatch> AchBatches => _achBatches;
+
+        public void CompleteParsing(string nachaEndString)
+        {
+            CheckNachaString(nachaEndString, "ACH file end string must be 94 characters long");
+
+            ControlRecordType = Convert.ToByte(nachaEndString[..1]);
+            BatchCount = Convert.ToInt32(nachaEndString[1..7]);
+            BlockCount = Convert.ToInt32(nachaEndString[7..13]);
+            EntryAndAddendaCount = Convert.ToInt32(nachaEndString[13..21]);
+            EntryHash = Convert.ToInt64(nachaEndString[21..31]);
+            TotalDebitAmount = decimal.Parse($"{nachaEndString[31..41]}.{nachaEndString[41..43]}",
+                CultureInfo.InvariantCulture);
+            TotalCreditAmount = decimal.Parse($"{nachaEndString[43..53]}.{nachaEndString[53..55]}",
+                CultureInfo.InvariantCulture);
+            Reserved = nachaEndString[55..94].TrimEnd();
+
+            ParsingComplete = true;
+        }
 
         public void AddBatch(AchBatch achBatch)
         {

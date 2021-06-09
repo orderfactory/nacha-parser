@@ -1,7 +1,9 @@
 ﻿using System;
+using Dapper.Contrib.Extensions;
 
 namespace OrderFactory.Nacha.Parser.Models
 {
+    [Table("AchReturnAddenda")]
     public class AchReturnAddenda : AchBase
     {
         public AchReturnAddenda(Guid id, byte recordType, byte addendaTypeCode, string returnReasonCode,
@@ -36,7 +38,7 @@ namespace OrderFactory.Nacha.Parser.Models
             ParsingComplete = true;
         }
 
-        public Guid Id { get; }
+        [ExplicitKey] public Guid Id { get; }
         public byte RecordType { get; }
         public byte AddendaTypeCode { get; }
         public string ReturnReasonCode { get; }

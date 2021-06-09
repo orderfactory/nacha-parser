@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Globalization;
+using Dapper.Contrib.Extensions;
 
 namespace OrderFactory.Nacha.Parser.Models
 {
+    [Table("AchEntry")]
     public class AchEntry : AchBase
     {
         public AchEntry(Guid id, byte recordType, byte transactionCode, string receivingDfiId, byte checkDigit,
@@ -54,7 +56,7 @@ namespace OrderFactory.Nacha.Parser.Models
             ParsingComplete = true;
         }
 
-        public Guid Id { get; }
+        [ExplicitKey] public Guid Id { get; }
         public byte RecordType { get; }
         public byte TransactionCode { get; }
         public string ReceivingDfiId { get; }
@@ -71,8 +73,7 @@ namespace OrderFactory.Nacha.Parser.Models
         public short? DateJulian { get; }
         public short? SequenceNumber { get; }
         public Guid AchBatchId { get; }
-
-        public AchReturnAddenda? AchReturnAddenda { get; private set; }
+        [Write(false)] public AchReturnAddenda? AchReturnAddenda { get; private set; }
 
         public void SetReturnAddenda(AchReturnAddenda achReturnAddenda)
         {

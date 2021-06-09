@@ -1,10 +1,11 @@
 ﻿using System;
+using Dapper.Contrib.Extensions;
 
 namespace OrderFactory.Nacha.Parser.Models
 {
     public abstract class AchBase
     {
-        public bool ParsingComplete { get; protected set; }
+        [Write(false)] public bool ParsingComplete { get; protected set; }
 
         protected static void CheckNachaString(string nachaString, string? nachaStringError)
         {

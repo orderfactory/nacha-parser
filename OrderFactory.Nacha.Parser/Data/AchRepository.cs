@@ -9,7 +9,7 @@ namespace OrderFactory.Nacha.Parser.Data
 {
     public interface IAchRepository
     {
-        public Task<int> InsertAchFile(AchFile achFile);
+        public Task<AchInsertionResults> InsertAchFile(AchFile achFile);
     }
 
     public class AchRepository : IAchRepository
@@ -21,16 +21,25 @@ namespace OrderFactory.Nacha.Parser.Data
             _sqlConnectionFactory = sqlConnectionFactory;
         }
 
-        public async Task<int> InsertAchFile(AchFile achFile)
+        public async Task<AchInsertionResults> InsertAchFile(AchFile achFile)
         {
             using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             using var connection = Connection();
-            var count = await connection.InsertAsync(achFile);
-            await InsertAchBatches(achFile, connection);
-            await InsertAchEntries(achFile, connection);
-            await InsertAchReturnAddenda(achFile, connection);
+
+            await connection.InsertAsync(achFile);
+            var achBatchesInserted = await InsertAchBatches(achFile, connection);
+            var achEntriesInserted = await InsertAchEntries(achFile, connection);
+            var achReturnAddendaInserted = await InsertAchReturnAddenda(achFile, connection);
+
+            var achInsertionResults = new AchInsertionResults(
+                achFile.Id,
+                achBatchesInserted,
+                achEntriesInserted,
+                achReturnAddendaInserted
+            );
+
             transaction.Complete();
-            return count;
+            return achInsertionResults;
         }
 
         private static Task<int> InsertAchBatches(AchFile achFile, IDbConnection connection)

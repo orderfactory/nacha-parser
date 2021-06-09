@@ -25,6 +25,7 @@ namespace OrderFactory.Nacha.Functions
             builder.Services.AddSingleton<IGuidGenerator, GuidGenerator>();
             builder.Services.AddSingleton<IAchParser, AchParser>();
             builder.Services.AddSingleton<IAchRepository, AchRepository>();
+            builder.Services.AddSingleton<IAchService, AchService>();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace OrderFactory.Nacha.Parser.Core
 {
     public interface IAchService
     {
-        Task AchParseAndSave(Stream stream);
+        Task<AchInsertionResults> AchParseAndSave(Stream stream);
     }
 
     public class AchService : IAchService
@@ -23,11 +23,12 @@ namespace OrderFactory.Nacha.Parser.Core
             _logger = logger;
         }
 
-        public async Task AchParseAndSave(Stream stream)
+        public async Task<AchInsertionResults> AchParseAndSave(Stream stream)
         {
             var achFile = await _achParser.ParseAsync(stream);
             var achInsertionResults = await _achRepository.InsertAchFile(achFile);
             _logger.LogInformation("Ach inserted to the database. ({achInsertionResults})", achInsertionResults);
+            return achInsertionResults;
         }
     }
 }

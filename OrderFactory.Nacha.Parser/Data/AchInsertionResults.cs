@@ -4,24 +4,24 @@ namespace OrderFactory.Nacha.Parser.Data
 {
     public class AchInsertionResults
     {
-        public AchInsertionResults(Guid achFileId, int achBatchesInserted, int achEntriesInserted,
-            int achReturnAddendaInserted)
+        public AchInsertionResults(Guid achFileId, int achBatchesCount, int achEntriesCount,
+            int achReturnAddendaCount)
         {
             AchFileId = achFileId;
-            AchBatchesInserted = achBatchesInserted;
-            AchEntriesInserted = achEntriesInserted;
-            AchReturnAddendaInserted = achReturnAddendaInserted;
+            AchBatchesCount = achBatchesCount;
+            AchEntriesCount = achEntriesCount;
+            AchReturnAddendaCount = achReturnAddendaCount;
         }
 
         public Guid AchFileId { get; }
-        public int AchBatchesInserted { get; }
-        public int AchEntriesInserted { get; }
-        public int AchReturnAddendaInserted { get; }
+        public int AchBatchesCount { get; }
+        public int AchEntriesCount { get; }
+        public int AchReturnAddendaCount { get; }
 
         public override string ToString()
         {
             return
-                $"{nameof(AchFileId)}: {AchFileId}, {nameof(AchBatchesInserted)}: {AchBatchesInserted}, {nameof(AchEntriesInserted)}: {AchEntriesInserted}, {nameof(AchReturnAddendaInserted)}: {AchReturnAddendaInserted}";
+                $"{nameof(AchFileId)}: {AchFileId}, {nameof(AchBatchesCount)}: {AchBatchesCount}, {nameof(AchEntriesCount)}: {AchEntriesCount}, {nameof(AchReturnAddendaCount)}: {AchReturnAddendaCount}";
         }
     }
 }

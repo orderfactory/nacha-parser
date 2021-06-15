@@ -36,9 +36,14 @@ namespace OrderFactory.Nacha.Parser.Models
             AddendaTypeCode = Convert.ToByte(nachaString[1..3]);
             AchReasonCodeId = nachaString[3..6].TrimEnd().ToUpper();
             OriginalEntryTraceNumber = nachaString[6..21].TrimEnd();
+
+            var dateOfDeathSpan = nachaString[21..27];
             DateOfDeath = _deceasedReasonCodes.Contains(AchReasonCodeId, StringComparer.InvariantCultureIgnoreCase)
-                ? DateTime.ParseExact(nachaString[21..27], "yyMMdd", CultureInfo.InvariantCulture)
+                          && !string.IsNullOrWhiteSpace(dateOfDeathSpan)
+                          && dateOfDeathSpan != "000000"
+                ? DateTime.ParseExact(dateOfDeathSpan, "yyMMdd", CultureInfo.InvariantCulture)
                 : (DateTime?) null;
+
             OriginalReceivingDfiId = nachaString[27..35].TrimEnd();
             AddendaData = nachaString[35..79].TrimEnd();
             TraceNumber = nachaString[79..94].TrimEnd();

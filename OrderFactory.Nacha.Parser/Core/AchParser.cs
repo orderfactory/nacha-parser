@@ -26,7 +26,7 @@ namespace OrderFactory.Nacha.Parser.Core
 
             string nachaString;
             while (!parsing.Complete && (nachaString = await reader.ReadLineAsync()) != null)
-                ProcessNachaString(nachaString, parsing);
+                ProcessNachaString(nachaString.PadRight(94,' '), parsing);
 
             if (parsing.CurrentAchFile is {ParsingComplete: true}) return parsing.CurrentAchFile;
 

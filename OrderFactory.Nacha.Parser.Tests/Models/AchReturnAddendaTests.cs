@@ -29,6 +29,7 @@ namespace OrderFactory.Nacha.Parser.Tests.Models
                 98,
                 "C01",
                 "053100300000645",
+                null,
                 "25327836",
                 "158659591416",
                 "053100302670271",

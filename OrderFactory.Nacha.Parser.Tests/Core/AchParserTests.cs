@@ -22,7 +22,7 @@ namespace OrderFactory.Nacha.Parser.Tests.Core
             _guidGenerator.NewGuid().Returns(Guid.NewGuid());
             var parser = new AchParser(_guidGenerator);
 
-            var achFile = await parser.ParseAsync(stream!);
+            var achFile = await parser.ParseAsync(stream!,"foo");
 
             achFile.Should().NotBeNull();
             achFile.BatchCount.Should().Be(3);
@@ -33,6 +33,7 @@ namespace OrderFactory.Nacha.Parser.Tests.Core
             achFile.AchBatches.ElementAt(1).AchEntries.First().AchReturnAddenda!.OriginalReceivingDfiId.Should()
                 .Be("31407426");
             achFile.TotalDebitAmount.Should().Be(1913.45M);
+            achFile.ParsedFileName.Should().Be("foo");
         }
     }
 }

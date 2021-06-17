@@ -7,7 +7,7 @@ namespace OrderFactory.Nacha.Parser.Core
 {
     public interface IAchParser
     {
-        Task<AchFile> ParseAsync(Stream stream);
+        Task<AchFile> ParseAsync(Stream stream, string? name);
     }
 
     public class AchParser : IAchParser
@@ -19,10 +19,10 @@ namespace OrderFactory.Nacha.Parser.Core
             _guidGenerator = guidGenerator;
         }
 
-        public async Task<AchFile> ParseAsync(Stream stream)
+        public async Task<AchFile> ParseAsync(Stream stream, string? name)
         {
             using StreamReader reader = new StreamReader(stream);
-            var parsing = new Parsing();
+            var parsing = new Parsing(name);
 
             string nachaString;
             while (!parsing.Complete && (nachaString = await reader.ReadLineAsync()) != null)
@@ -30,7 +30,7 @@ namespace OrderFactory.Nacha.Parser.Core
 
             if (parsing.CurrentAchFile is {ParsingComplete: true}) return parsing.CurrentAchFile;
 
-            throw new ArgumentException("Unable to complete ACH file parsing from stream.", nameof(stream));
+            throw new ArgumentException($"Unable to complete parsing of ACH file '{name}' from stream.", nameof(stream));
         }
 
         private void ProcessNachaString(string nachaString, Parsing parsing)
@@ -63,7 +63,7 @@ namespace OrderFactory.Nacha.Parser.Core
 
         private void ProcessFileHeader(string nachaString, Parsing parsing)
         {
-            parsing.CurrentAchFile = new AchFile(_guidGenerator.NewGuid(), nachaString);
+            parsing.CurrentAchFile = new AchFile(_guidGenerator.NewGuid(), nachaString, parsing.Name);
         }
 
         private static void ProcessFileFooter(string nachaString, Parsing parsing)

@@ -14,7 +14,7 @@ namespace OrderFactory.Nacha.Parser.Models
             DateTime creationDateTime, string fileIdModifier, short recordSize, byte blockingFactor, byte formatCode,
             string immediateDestinationName, string immediateOriginName, string referenceCode, byte controlRecordType,
             int batchCount, int blockCount, int entryAndAddendaCount, long entryHash, decimal totalDebitAmount,
-            decimal totalCreditAmount, string reserved)
+            decimal totalCreditAmount, string reserved, string? parsedFileName)
         {
             Id = id;
             RecordType = recordType;
@@ -37,14 +37,16 @@ namespace OrderFactory.Nacha.Parser.Models
             TotalDebitAmount = totalDebitAmount;
             TotalCreditAmount = totalCreditAmount;
             Reserved = reserved;
+            ParsedFileName = parsedFileName;
             ParsingComplete = true;
         }
 
-        public AchFile(Guid id, string nachaStartString)
+        public AchFile(Guid id, string nachaStartString, string? name)
         {
             CheckNachaString(nachaStartString, "ACH file start string must be 94 characters long");
 
             Id = id;
+            ParsedFileName = name;
             RecordType = Convert.ToByte(nachaStartString[..1]);
             PriorityCode = Convert.ToByte(nachaStartString[1..3]);
             ImmediateDestination = nachaStartString[4..13];
@@ -81,6 +83,8 @@ namespace OrderFactory.Nacha.Parser.Models
         public decimal? TotalDebitAmount { get; private set; }
         public decimal? TotalCreditAmount { get; private set; }
         public string? Reserved { get; private set; }
+        public string? ParsedFileName { get; }
+        
         [Write(false)] public IEnumerable<AchBatch> AchBatches => _achBatches;
 
         public void CompleteParsing(string nachaEndString)

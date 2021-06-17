@@ -12,7 +12,7 @@ namespace OrderFactory.Nacha.Parser.Tests.Models
         {
             Action creteEntry = () =>
             {
-                var _ = new AchFile(default, "foo");
+                var _ = new AchFile(default, "foo", "baz");
             };
 
             creteEntry.Should().Throw<ArgumentException>();
@@ -24,7 +24,8 @@ namespace OrderFactory.Nacha.Parser.Tests.Models
             Action creteEntry = () =>
             {
                 var achFile = new AchFile(default,
-                    "101 053100300 0531003001409052049T094101RESOLVED RETURN DATA   FIRST CITIZENS NC              ");
+                    "101 053100300 0531003001409052049T094101RESOLVED RETURN DATA   FIRST CITIZENS NC              ",
+                    "baz");
                 achFile.CompleteParsing("bar");
             };
 
@@ -57,7 +58,8 @@ namespace OrderFactory.Nacha.Parser.Tests.Models
                 107389650,
                 1913.45M,
                 0,
-                ""
+                "",
+                "foo"
             );
 
             const string nachaStartString =
@@ -65,7 +67,7 @@ namespace OrderFactory.Nacha.Parser.Tests.Models
             const string nachaEndString =
                 "9000003000002000000080107389650000000191345000000000000                                       ";
 
-            var achFile = new AchFile(fileId, nachaStartString);
+            var achFile = new AchFile(fileId, nachaStartString, "foo");
             achFile.CompleteParsing(nachaEndString);
 
             achFile.Should().BeEquivalentTo(expected);

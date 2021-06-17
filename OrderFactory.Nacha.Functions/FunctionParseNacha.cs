@@ -24,7 +24,7 @@ namespace OrderFactory.Nacha.Functions
         {
             try
             {
-                var achInsertionResults = await _achService.AchParseAndSave(blobStream);
+                var achInsertionResults = await _achService.AchParseAndSave(blobStream, name);
                 queueCollector.Add(achInsertionResults);
                 log.LogInformation(
                     $"C# Blob trigger function Processed blob\n Name: {name} \n Size: {blobStream.Length} Bytes");

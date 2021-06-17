@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -37,6 +38,7 @@ namespace OrderFactory.Nacha.Functions
             sb.AppendLine($"{statusString}\r\n");
 
             AppendForwardedFor(req, sb);
+            AppendTimestamp(sb);
 
             return new OkObjectResult(sb.ToString());
         }
@@ -46,6 +48,11 @@ namespace OrderFactory.Nacha.Functions
             if (!req.Headers.TryGetValue("X-Forwarded-For", out var values)) return;
             sb.AppendLine("\r\nX-Forwarded-For:");
             foreach (var stringValue in values) sb.Append(stringValue);
+        }
+
+        private static void AppendTimestamp(StringBuilder sb)
+        {
+            sb.AppendLine($"\r\n\r\nTimestamp: {DateTime.Now}");
         }
     }
 }

@@ -7,7 +7,7 @@
     [OriginalEntryTraceNumber] NVARCHAR(15)     NOT NULL,
     [DateOfDeath]              DATETIME2        NULL,
     [OriginalReceivingDfiId]   NCHAR(8)         NOT NULL,
-    [AddendaData]              NVARCHAR(29)     NULL,
+    [AddendaData]              NVARCHAR(44)     NULL,
     [TraceNumber]              NVARCHAR(15)     NOT NULL,
     [AchEntryId]             UNIQUEIDENTIFIER NOT NULL,
 	[DateCreated] DATETIME2 NOT NULL DEFAULT GETDATE(),
